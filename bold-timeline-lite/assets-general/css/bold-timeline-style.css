@@ -1,0 +1,9 @@
+.elementor-element .icon .class-name:before {
+    content: "";
+    content: '\e915';
+    height: 30px;
+    display: block;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
