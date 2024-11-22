@@ -3,7 +3,7 @@
 /**
  * Plugin Name: Bold Timeline Lite
  * Description: Bold Timeline Lite by BoldThemes.
- * Version: 1.2.2
+ * Version: 1.2.3
  * Author: BoldThemes
  * Author URI: https://bold-themes.com/
  */
@@ -144,7 +144,7 @@ if( !in_array( 'bold-timeline/bold-timeline.php', apply_filters('active_plugins'
 		function bold_timeline_load_textdomain() {
 			load_plugin_textdomain( 'bold-timeline', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' ); 
 		}
-		add_action( 'plugins_loaded', 'bold_timeline_load_textdomain' );
+		add_action( 'init', 'bold_timeline_load_textdomain' );
 
 		$glob_match = glob( plugin_dir_path( __FILE__ ) . 'content_elements/*/*.php' );
 		$elements = array();
