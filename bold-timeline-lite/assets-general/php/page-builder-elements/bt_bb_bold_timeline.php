@@ -72,10 +72,11 @@ if ( ! class_exists( 'bt_bb_bold_timeline' ) && class_exists( 'BT_BB_Element' ) 
 
 	}
 
-	new bt_bb_bold_timeline();
+	add_action( 'init', function() {
+		new bt_bb_bold_timeline();
 
-	require_once wp_normalize_path(  __DIR__ . '/../bb/index.php' );
-
+		require_once wp_normalize_path(  __DIR__ . '/../bb/index.php' );
+	} );
 }
 
 
