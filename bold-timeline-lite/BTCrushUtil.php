@@ -8,7 +8,7 @@ namespace CssCrush;
 
 class Util
 {
-    public static function htmlAttributes(array $attributes, array $sort_order = null)
+    public static function htmlAttributes(array $attributes, ?\array $sort_order = null)
     {
         // Optionally sort attributes (for better readability).
         if ($sort_order) {

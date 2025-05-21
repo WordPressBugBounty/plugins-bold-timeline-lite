@@ -3,7 +3,7 @@
 /**
  * Plugin Name: Bold Timeline Lite
  * Description: Bold Timeline Lite by BoldThemes.
- * Version: 1.2.4
+ * Version: 1.2.5
  * Author: BoldThemes
  * Author URI: https://bold-themes.com/
  */

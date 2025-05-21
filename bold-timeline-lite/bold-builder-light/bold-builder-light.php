@@ -89,6 +89,7 @@ if ( ! class_exists( 'BTBB_Light' ) ) {
 			add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 			add_action( 'admin_notices', array( $this, 'admin_notices' ) );
 			add_action( 'init', array( $this, 'create_post_type' ) );
+			add_action( 'wp_loaded', array( $this, 'create_post_type' ) ); // fix wp-includes/media.php on line 4988... in WP 6.8.1
 
 			add_shortcode( $this->shortcode, array( $this, 'add_shortcode' ) );
 			
