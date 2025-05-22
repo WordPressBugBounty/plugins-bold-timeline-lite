@@ -45,4 +45,4 @@ function bold_timeline_item_text() {
         );	
 	
 }
-add_action( 'plugins_loaded', 'bold_timeline_item_text' );
+add_action( 'wp_loaded', 'bold_timeline_item_text' );
