@@ -8,7 +8,7 @@ namespace CssCrush;
 
 class Util
 {
-    public static function htmlAttributes(array $attributes, ?\array $sort_order = null)
+    public static function htmlAttributes(array $attributes, ?array $sort_order = null)
     {
         // Optionally sort attributes (for better readability).
         if ($sort_order) {
@@ -75,7 +75,7 @@ class Util
         return $path;
     }
 
-    public static function resolveUserPath($path, $recovery = null, $docRoot = null)
+    public static function resolveUserPath($path, ?callable $recovery = null, $docRoot = null)
     {
         // System path.
         if ($realpath = realpath($path)) {
@@ -98,7 +98,7 @@ class Util
                 $path = Crush::$config->scriptDir . '/' . $path;
             }
 
-            if (! file_exists($path) && is_callable($recovery)) {
+            if (! file_exists($path) && $recovery) {
                 $path = $recovery($path);
             }
             $path = realpath($path);
@@ -116,14 +116,14 @@ class Util
     {
         static $find, $replace;
         if (! $find) {
-            $replacements = array(
+            $replacements = [
                 // Convert all whitespace sequences to a single space.
                 '~\s+~S' => ' ',
                 // Trim bracket whitespace where it's safe to do it.
                 '~([\[(]) | ([\])])| ?([{}]) ?~S' => '${1}${2}${3}',
                 // Trim whitespace around delimiters and special characters.
                 '~ ?([;,]) ?~S' => '$1',
-            );
+            ];
             $find = array_keys($replacements);
             $replace = array_values($replacements);
         }
@@ -131,28 +131,29 @@ class Util
         return preg_replace($find, $replace, $str);
     }
 
-    public static function splitDelimList($str, $options = array())
+    public static function splitDelimList($str, $options = [])
     {
-        extract($options + array(
+        extract($options + [
             'delim' => ',',
             'regex' => false,
             'allow_empty_strings' => false,
-        ));
+        ]);
 
         $str = trim($str);
 
-        if (! $regex && strpos($str, $delim) === false) {
-            return ! $allow_empty_strings && ! strlen($str) ? array() : array($str);
+        if (! $regex && strpos($str, $delim) === false) { // @phpstan-ignore-line variable.undefined
+            return ! $allow_empty_strings && ! strlen($str) ? [] : [$str]; // @phpstan-ignore-line variable.undefined
         }
 
         if ($match_count = preg_match_all(Regex::$patt->parens, $str, $matches)) {
-            $keys = array();
+            $keys = [];
             foreach ($matches[0] as $index => &$value) {
                 $keys[] = "?$index?";
             }
             $str = str_replace($matches[0], $keys, $str);
         }
 
+        // @phpstan-ignore-next-line variable.undefined
         $list = $regex ? preg_split($regex, $str) : explode($delim, $str);
 
         if ($match_count) {
@@ -163,6 +164,7 @@ class Util
 
         $list = array_map('trim', $list);
 
+        // @phpstan-ignore-next-line variable.undefined
         return ! $allow_empty_strings ? array_filter($list, 'strlen') : $list;
     }
 
@@ -198,6 +200,20 @@ class Util
         return $link;
     }
 
+    public static function filePutContents($file, $str)
+    {
+        if ($stream = fopen($file, 'w')) {
+            fwrite($stream, $str);
+            fclose($stream);
+
+            return true;
+        }
+
+        warning("Could not write file '$file'.");
+
+        return false;
+    }
+
     public static function parseIni($path, $sections = false)
     {
         if (! ($result = @parse_ini_file($path, $sections))) {
@@ -206,6 +222,12 @@ class Util
             return false;
         }
         return $result;
+    }
+
+    public static function readConfigFile($path)
+    {
+        require_once $path;
+        return Options::filter(get_defined_vars());
     }
 
     /*
@@ -243,12 +265,12 @@ class Util
 
         $encoded = "";
         do {
-          $digit = $vlq & $VLQ_BASE_MASK;
-          $vlq >>= $VLQ_BASE_SHIFT;
-          if ($vlq > 0) {
-            $digit |= $VLQ_CONTINUATION_BIT;
-          }
-          $encoded .= $BASE64_MAP[$digit];
+            $digit = $vlq & $VLQ_BASE_MASK;
+            $vlq >>= $VLQ_BASE_SHIFT;
+            if ($vlq > 0) {
+                $digit |= $VLQ_CONTINUATION_BIT;
+            }
+            $encoded .= $BASE64_MAP[$digit];
 
         } while ($vlq > 0);
 

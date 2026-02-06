@@ -59,7 +59,7 @@ class Regex
         $patt->rooted_number = '~^' . $classes->number . '$~';
 
         // @-rules.
-        $patt->import = Regex::make('~@' . 'import \s+ ({{u_token}}) \s? ([^;]*);~ixS');
+        $patt->import = Regex::make('~@import \s+ ({{u_token}}) \s? ([^;]*);~ixS');
         $patt->charset = Regex::make('~@charset \s+ ({{s_token}}) \s*;~ixS');
         $patt->mixin = Regex::make('~@mixin \s+ (?<name>{{ident}}) \s* {{block}}~ixS');
         $patt->fragmentCapture = Regex::make('~@fragment \s+ (?<name>{{ident}}) \s* {{block}}~ixS');
@@ -68,13 +68,13 @@ class Regex
 
         // Functions.
         $patt->functionTest = Regex::make('~{{ LB }} (?<func_name>{{ ident }}) \(~xS');
-        $patt->thisFunction = Functions::makePattern(array('this'));
+        $patt->thisFunction = Functions::makePattern(['this']);
 
         // Strings and comments.
         $patt->string = '~(\'|")(?:\\\\\1|[^\1])*?\1~xS';
         $patt->commentAndString = '~
             # Quoted string (to EOF if unmatched).
-            (\'|")(?:\\\\\1|[^\1])*?(?:\1|$)
+            (\'|"|`)(?:\\\\\1|[^\1])*?(?:\1|$)
             |
             # Block comment (to EOF if unmatched).
             /\*(?:[^*]*\*+(?:[^/*][^*]*\*+)*/|.*)
@@ -82,7 +82,7 @@ class Regex
 
         // Misc.
         $patt->vendorPrefix = '~^-([a-z]+)-([a-z-]+)~iS';
-        $patt->ruleDirective = '~^(?:(@' . 'include)|(@extends?)|(@name))[\s]+~iS';
+        $patt->ruleDirective = '~^(?:(@include)|(@extends?)|(@name))[\s]+~iS';
         $patt->argListSplit = '~\s*[,\s]\s*~S';
         $patt->cruftyHex = Regex::make('~\#({{hex}})\1({{hex}})\2({{hex}})\3~S');
         $patt->token = Regex::make('~^ \? (?<type>[a-zA-Z]) {{token_id}} \? $~xS');
@@ -90,7 +90,7 @@ class Regex
 
     public static function make($pattern)
     {
-        static $cache = array();
+        static $cache = [];
 
         if (isset($cache[$pattern])) {
             return $cache[$pattern];
@@ -105,7 +105,7 @@ class Regex
     {
         $count = preg_match_all($patt, $subject, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER, $offset);
 
-        return $count ? $matches : array();
+        return $count ? $matches : [];
     }
 }
 

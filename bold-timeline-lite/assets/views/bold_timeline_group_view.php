@@ -76,7 +76,7 @@
 				if ( $title != '' ) {
 						$output .= '<div class="bold_timeline_group_header">';
 						$output .= '<div class="bold_timeline_group_header_inner">';
-							if ( $title != '' ) $output .= '<' . $group_title_tag . ' class="bold_timeline_group_header_title">' . $title . '</' . $group_title_tag . '>';	
+							if ( $title != '' ) $output .= '<' . $group_title_tag . ' class="bold_timeline_group_header_title">' . wp_kses_post( $title ) . '</' . $group_title_tag . '>';	
 						$output .= '</div>';
 					$output .= '</div>';
 				}

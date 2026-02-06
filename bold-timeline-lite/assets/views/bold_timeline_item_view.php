@@ -200,7 +200,7 @@
 				$output .= '<div class="' . implode( ' ', $header_class ) . '">';
 					$output .= '<div class="bold_timeline_item_header_inner">';
 						if ( $supertitle != '' ) $output .= '<p class="bold_timeline_item_header_supertitle"><span class="bold_timeline_item_header_supertitle_inner">' . $supertitle . '</span></p>';
-						if ( $title != '' ) $output .= '<' . $item_title_tag . ' class="bold_timeline_item_header_title">' .$title . '</' . $item_title_tag . '>';
+						if ( $title != '' ) $output .= '<' . $item_title_tag . ' class="bold_timeline_item_header_title">' . wp_kses_post( $title ) . '</' . $item_title_tag . '>';
 						if ( $subtitle != '' ) $output .= '<p class="bold_timeline_item_header_subtitle">' . $subtitle . '</p>';
 					$output .= '</div>';
 				$output .= '</div>';

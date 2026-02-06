@@ -2,8 +2,8 @@
 Contributors: boldthemes
 Tags: company timeline, event timeline, horizontal timeline, timeline, history, company history, shortcode builder timeline, slider timeline, step by step line, story timeline, storyline, timeline, timeline plugin, vertical timeline, wordpress timeline, wp timeline
 Requires at least: 4.5
-Tested up to: 6.8
-Stable tag: 1.2.6
+Tested up to: 6.9
+Stable tag: 1.2.8
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -54,6 +54,12 @@ This timeline has its own shortcode builder which makes it easy to use with any 
 **For many additional and advanced options/features you can check our [Bold Timeline Full Version](https://bold-timeline.bold-themes.com/).**
 
 == Changelog ==
+
+= 1.2.8 =
+* Minor bug fixes.
+
+= 1.2.7 =
+* Minor bug fixes.
 
 = 1.2.6 =
 * Minor bug fixes.
