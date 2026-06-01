@@ -53,23 +53,25 @@ if ( ! class_exists( 'BTBB_Light_List_Table' ) ) {
 			);
 
 			if ( ! empty( $_REQUEST['s'] ) ) {
-				$args['s'] = sanitize_text_field( $_REQUEST['s'] );
+				$args['s'] = sanitize_text_field( wp_unslash( $_REQUEST['s'] ) );
 			}
 
 			if ( ! empty( $_REQUEST['orderby'] ) ) {
-				if ( 'title' == $_REQUEST['orderby'] ) {
+				$orderby = sanitize_key( wp_unslash( $_REQUEST['orderby'] ) );
+				if ( 'title' === $orderby ) {
 					$args['orderby'] = 'title';
-				} elseif ( 'author' == $_REQUEST['orderby'] ) {
+				} elseif ( 'author' === $orderby ) {
 					$args['orderby'] = 'author';
-				} elseif ( 'date' == $_REQUEST['orderby'] ) {
+				} elseif ( 'date' === $orderby ) {
 					$args['orderby'] = 'date';
 				}
 			}
 
 			if ( ! empty( $_REQUEST['order'] ) ) {
-				if ( 'asc' == strtolower( $_REQUEST['order'] ) ) {
+				$order = strtolower( sanitize_key( wp_unslash( $_REQUEST['order'] ) ) );
+				if ( 'asc' === $order ) {
 					$args['order'] = 'ASC';
-				} elseif ( 'desc' == strtolower( $_REQUEST['order'] ) ) {
+				} elseif ( 'desc' === $order ) {
 					$args['order'] = 'DESC';
 				}
 			}
@@ -154,8 +156,11 @@ if ( ! class_exists( 'BTBB_Light_List_Table' ) ) {
 			$output = sprintf(
 				'<a class="row-title" href="%1$s" title="%2$s">%3$s</a>',
 				esc_url( $edit_link ),
-				esc_attr( sprintf( esc_html__( 'Edit &#8220;%s&#8221;', 'bold-timeline' ),
-					$item->title() ) ),
+				esc_attr( sprintf(
+					/* translators: %s: item title */
+					esc_html__( 'Edit &#8220;%s&#8221;', 'bold-timeline' ),
+					$item->title()
+				) ),
 				esc_html( $item->title() )
 			);
 
@@ -234,7 +239,10 @@ if ( ! class_exists( 'BTBB_Light_List_Table' ) ) {
 
 			if ( $time_diff > 0 && $time_diff < 24*60*60 ) {
 				$h_time = sprintf(
-				 esc_html__( '%s ago', 'bold-timeline' ), human_time_diff( $time ) );
+					/* translators: %s: human-readable time difference, e.g. "5 mins" */
+					esc_html__( '%s ago', 'bold-timeline' ),
+					human_time_diff( $time )
+				);
 			} else {
 				$h_time = mysql2date( esc_html__( 'Y/m/d', 'bold-timeline' ), $m_time );
 			}

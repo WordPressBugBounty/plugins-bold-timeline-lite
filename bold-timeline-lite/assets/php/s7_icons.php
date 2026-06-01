@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 function bold_timeline_s7_icons() {
 	$arr = array(
 		'album (s7)' => 's7_' . 'e6aa',

@@ -1,4 +1,8 @@
-<?php		
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 		$prefix = 'bold_timeline_group';
 		$class = array( $prefix );	
 

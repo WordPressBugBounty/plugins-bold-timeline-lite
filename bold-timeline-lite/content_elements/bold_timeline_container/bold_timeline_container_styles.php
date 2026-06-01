@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 global $bold_timeline_container_style;
 $timeline_styles = bold_timeline_lite_styles( $bold_timeline_container_style );
 

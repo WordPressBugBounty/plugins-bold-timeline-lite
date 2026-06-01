@@ -3,12 +3,19 @@
 /**
  * Plugin Name: Bold Timeline Lite
  * Description: Bold Timeline Lite by BoldThemes.
- * Version: 1.2.8
+ * Version: 1.3.0
  * Author: BoldThemes
  * Author URI: https://bold-themes.com/
+ * License: GPL v2 or later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain: bold-timeline-lite
  */
 
-if( !in_array( 'bold-timeline/bold-timeline.php', apply_filters('active_plugins', get_option('active_plugins')))){ 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+if( !in_array( 'bold-timeline/bold-timeline.php', apply_filters('active_plugins', get_option('active_plugins')))){
 
 	if ( ! class_exists( 'Bold_Timeline' ) ) {
 
@@ -133,8 +140,8 @@ if( !in_array( 'bold-timeline/bold-timeline.php', apply_filters('active_plugins'
 			wp_enqueue_style( 'bt-bb-light-override', plugins_url( 'bt_bbl_override.css', __FILE__ ) );
 		}
 
-		if ( isset( $_GET['page'] ) && $_GET['page'] == 'bold-timeline-edit' ) {
-			add_action( 'admin_enqueue_scripts', 'bold_timeline_admin_style' );	
+		if ( isset( $_GET['page'] ) && 'bold-timeline-edit' === sanitize_text_field( wp_unslash( $_GET['page'] ) ) ) {
+			add_action( 'admin_enqueue_scripts', 'bold_timeline_admin_style' );
 		}
 
 		/**
@@ -311,7 +318,7 @@ if( !in_array( 'bold-timeline/bold-timeline.php', apply_filters('active_plugins'
 		}	
 	}
 
-	if ( isset( $_GET['page'] ) && $_GET['page'] == 'bold-timeline-edit' ) {
+	if ( isset( $_GET['page'] ) && 'bold-timeline-edit' === sanitize_text_field( wp_unslash( $_GET['page'] ) ) ) {
 		add_action( 'admin_enqueue_scripts', 'bold_timeline_admin_enqueue', 100 );
 	}
 }

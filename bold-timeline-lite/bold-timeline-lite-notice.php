@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 if (!class_exists('BoldTimelineLiteNotice')) {
 	 class BoldTimelineLiteNotice {
 			public function __construct() {				
@@ -26,9 +30,29 @@ if (!class_exists('BoldTimelineLiteNotice')) {
 						return;
 					}
 					
-					$dismissed_value = get_transient( 'bold-timeline-lite-plugin-notice-dismissed' );	
+					$dismissed_value = get_transient( 'bold-timeline-lite-plugin-notice-dismissed' );
 					if( $dismissed_value === false ) {
-						echo $this->bold_timeline_lite_create_notice_for_upgrade_plugin();	
+						$allowed_html = array(
+							'div' => array(
+								'class'              => true,
+								'data-ajax-url'      => true,
+								'data-ajax-callback' => true,
+							),
+							'a'   => array(
+								'href'   => true,
+								'target' => true,
+								'class'  => true,
+								'title'  => true,
+							),
+							'img' => array(
+								'src' => true,
+								'alt' => true,
+							),
+							'p'   => array(),
+							'ul'  => array(),
+							'li'  => array(),
+						);
+						echo wp_kses( $this->bold_timeline_lite_create_notice_for_upgrade_plugin(), $allowed_html );
 					}
 			}
 

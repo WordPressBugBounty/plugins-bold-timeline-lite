@@ -25,7 +25,7 @@ function bold_timeline_get_bold_timelines() {
 		wp_reset_postdata();			
 	} 
 	
-	$bold_timelines_arr = array( '0' => esc_html__( '', 'bold-timeline' ) );
+	$bold_timelines_arr = array( '0' => '' );
 	foreach ( $bold_timelines_data as $item) {		
 		if ( $item ) {			
 			$bold_timelines_arr[ $item["ID"] ] = $item["title"]; 
@@ -59,7 +59,7 @@ function bold_timeline_get_bold_timelines_wpbakery_bb() {
 		wp_reset_postdata();			
 	} 
 	
-	$bold_timelines_arr = array( esc_html__( '', 'bold-timeline' ) => '0' );
+	$bold_timelines_arr = array( '' => '0' );
 	foreach ( $bold_timelines_data as $item) {	
 		if ( $item ) {	
 			$bold_timelines_arr[$item["title"]] =   $item["ID"] ;

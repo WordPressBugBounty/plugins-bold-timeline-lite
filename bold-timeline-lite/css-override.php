@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 $boldthemes_crush_vars = Bold_Timeline::$crush_vars;
 $boldthemes_crush_vars_def = Bold_Timeline::$crush_vars_def;
 if ( isset( $boldthemes_crush_vars['defaultLineColor'] ) ) {

@@ -1,4 +1,8 @@
-<?php 
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 // [bold_timeline_group]
 

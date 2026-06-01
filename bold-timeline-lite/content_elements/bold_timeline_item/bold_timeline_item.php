@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 // [bold_timeline_item]
 
 class Bold_Timeline_Item {

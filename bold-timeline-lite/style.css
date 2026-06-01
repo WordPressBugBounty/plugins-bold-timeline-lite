@@ -1,41 +1,82 @@
-/* TODO: uvesti fontove tek kada je potrebno? */
 /*  7-stroke (http://themes-pixeden.com/font-demos/7-stroke/index.html) */
+
 @font-face {
     font-family: 'Icon7Stroke';
-    src: url(assets/fonts/Pe-icon-7-stroke.eot?d7yf1v);
-    src: url(assets/fonts/Pe-icon-7-stroke.eot?#iefixd7yf1v) format('embedded-opentype'),url(assets/fonts/Pe-icon-7-stroke.woff?d7yf1v) format('woff'),url(assets/fonts/Pe-icon-7-stroke.ttf?d7yf1v) format('truetype'),url(assets/fonts/Pe-icon-7-stroke.svg?d7yf1v#Pe-icon-7-stroke) format('svg');
+    src:url('assets/fonts/Pe-icon-7-stroke.eot?d7yf1v');
+    src:url('assets/fonts/Pe-icon-7-stroke.eot?#iefixd7yf1v') format('embedded-opentype'),
+    url('assets/fonts/Pe-icon-7-stroke.woff?d7yf1v') format('woff'),
+    url('assets/fonts/Pe-icon-7-stroke.ttf?d7yf1v') format('truetype'),
+    url('assets/fonts/Pe-icon-7-stroke.svg?d7yf1v#Pe-icon-7-stroke') format('svg');
     font-weight: normal;
     font-style: normal;
-    }
+}
 
 /* FontAwesome5Brands */
+
 @font-face {
-    font-family: 'FontAwesome5Brands';
-    src: url(assets/fonts/FontAwesome5Brands.woff?v=1.1.1) format('woff'),url(assets/fonts/FontAwesome5Brands.ttf?v=1.1.1) format('truetype');
-    font-weight: normal;
-    font-style: normal;
-    }
+  font-family: 'FontAwesome5Brands';
+  src: url('assets/fonts/FontAwesome5Brands.woff?v=1.1.1') format('woff'), url('assets/fonts/FontAwesome5Brands.ttf?v=1.1.1') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}  
+
+/* FontAwesome5Regular */
+
+@font-face {
+  font-family: 'FontAwesome5Regular';
+  src: url('assets/fonts/FontAwesome5Regular.ttf?v=1.1.1') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}    
+
+/* FontAwesome5Solid */
+
+@font-face {
+  font-family: 'FontAwesome5Solid';
+  src: url('assets/fonts/FontAwesome5Solid.ttf?v=1.1.1') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}  
 
 /* FontAwesome */
+
 @font-face {
-    font-family: 'FontAwesome';
-    src: url(assets/fonts/fontawesome-webfont.eot?v=4.6.3);
-    src: url(assets/fonts/fontawesome-webfont.eot?#iefix&v=4.6.3) format('embedded-opentype'),url(assets/fonts/fontawesome-webfont.woff2?v=4.6.3) format('woff2'),url(assets/fonts/fontawesome-webfont.woff?v=4.6.3) format('woff'),url(assets/fonts/fontawesome-webfont.ttf?v=4.6.3) format('truetype'),url(assets/fonts/fontawesome-webfont.svg?v=4.6.3#fontawesomeregular) format('svg');
-    font-weight: normal;
-    font-style: normal;
-    }
+  font-family: 'FontAwesome';
+  src: url('assets/fonts/fontawesome-webfont.eot?v=4.6.3');
+  src: url('assets/fonts/fontawesome-webfont.eot?#iefix&v=4.6.3') format('embedded-opentype'), url('assets/fonts/fontawesome-webfont.woff2?v=4.6.3') format('woff2'), url('assets/fonts/fontawesome-webfont.woff?v=4.6.3') format('woff'), url('assets/fonts/fontawesome-webfont.ttf?v=4.6.3') format('truetype'), url('assets/fonts/fontawesome-webfont.svg?v=4.6.3#fontawesomeregular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}  
+
 [data-ico-fa]:before {
-    font-family: FontAwesome;
-    content: attr(data-ico-fa);
-    }
+  font-family: FontAwesome;
+  content: attr(data-ico-fa);
+}
+
 [data-ico-s7]:before {
-    font-family: Icon7Stroke;
-    content: attr(data-ico-s7);
-    }
+  font-family: Icon7Stroke;
+  content: attr(data-ico-s7);
+}
+
 [data-ico-fa5b]:before {
-    font-family: FontAwesome5Brands;
-    content: attr(data-ico-fa5b);
-    }
+  font-family: FontAwesome5Brands;
+  content: attr(data-ico-fa5b);
+}
+
+[data-ico-fa5_brands]:before {
+  font-family: FontAwesome5Brands;
+  content: attr(data-ico-fa5_brands);
+}
+
+[data-ico-fa5_regular]:before {
+  font-family: FontAwesome5Regular;
+  content: attr(data-ico-fa5_regular);
+}
+
+[data-ico-fa5_solid]:before {
+  font-family: FontAwesome5Solid;
+  content: attr(data-ico-fa5_regular);
+}
 
 /* Variables */
 /* rem */

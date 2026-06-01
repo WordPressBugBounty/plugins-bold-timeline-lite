@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 if ( ! function_exists( 'bold_timeline_lite_styles' ) ) {
 	function bold_timeline_lite_styles( $timeline_style ) {
 

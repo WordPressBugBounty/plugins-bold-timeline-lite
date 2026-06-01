@@ -67,7 +67,7 @@ if ( ! class_exists( 'BTBB_Light' ) ) {
 			$this->license_server_json_route = 'bt_license_server_json/v1';
 			$this->license_server_download_route = 'bt_license_server_download/v1';
 			
-			$urlparts = parse_url( home_url() );
+			$urlparts = wp_parse_url( home_url() );
 			$this->domain = $urlparts['host'];
 			
 			$this->product_id = $arr['product_id'];
@@ -258,7 +258,7 @@ if ( ! class_exists( 'BTBB_Light' ) ) {
 
 			$this->do_shortcode( $post_content );
 
-			$json_content = json_encode( $this->bt_bb_array );
+			$json_content = wp_json_encode( $this->bt_bb_array );
 
 			echo '<div id="bt_bb_sectionid"><div class="inside">';
 			
@@ -389,18 +389,20 @@ if ( ! class_exists( 'BTBB_Light' ) ) {
 
 			// save
 			if ( isset( $_POST['action'] ) && $_POST['action'] == 'save' ) {
-				
-				if ( ! wp_verify_nonce( sanitize_text_field( $_REQUEST['_wpnonce'] ), 'bt-bb-light-edit' ) ) {
+
+				if ( ! isset( $_REQUEST['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce'] ) ), 'bt-bb-light-edit' ) ) {
 					wp_die( esc_html__( 'Nonce error.', 'bold-timeline' ) );
 				}
 
 				if ( ! current_user_can( 'edit_posts' ) ) {
 					wp_die( esc_html__( 'You are not allowed to edit posts.', 'bold-timeline' ) );
 				}
-			
-				$post_id = isset( $_GET['post'] ) ? intval( $_GET['post'] ) : -1;
-				$post_title = $_POST['post_title'] != '' ? sanitize_text_field( $_POST['post_title'] ) : esc_html__( 'Untitled', 'bold-timeline' );
-				$post_content = wp_kses_post( stripslashes( $_POST['post_content'] ) );
+
+				// intval (not absint) — the editor submits ?post=-1 as the sentinel for "new post";
+				// absint would coerce -1 to 1 and route into the update branch on an unrelated post.
+				$post_id      = isset( $_GET['post'] ) ? intval( $_GET['post'] ) : -1;
+				$post_title   = ( isset( $_POST['post_title'] ) && $_POST['post_title'] != '' ) ? sanitize_text_field( wp_unslash( $_POST['post_title'] ) ) : esc_html__( 'Untitled', 'bold-timeline' );
+				$post_content = isset( $_POST['post_content'] ) ? wp_kses_post( wp_unslash( $_POST['post_content'] ) ) : '';
 				$query = array();
 				if ( $post_id == -1 ) { // new post
 					$post_id = wp_insert_post( array(
@@ -440,11 +442,17 @@ if ( ! class_exists( 'BTBB_Light' ) ) {
 			// delete
 			else if ( isset( $_GET['action'] ) && $_GET['action'] == 'delete' ) {
 
-				$posts = empty( $_POST['post_ID'] ) ? (array) $_GET['post'] : (array) $_POST['post_ID'];
+				if ( ! empty( $_POST['post_ID'] ) ) {
+					$posts = array_map( 'absint', (array) wp_unslash( $_POST['post_ID'] ) );
+				} elseif ( isset( $_GET['post'] ) ) {
+					$posts = array_map( 'absint', (array) wp_unslash( $_GET['post'] ) );
+				} else {
+					$posts = array();
+				}
 
 				$is_deleted = false;
-				
-				$bulk = wp_verify_nonce( sanitize_text_field( $_REQUEST['_wpnonce'] ), 'bulk-posts' );
+
+				$bulk = isset( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce'] ) ), 'bulk-posts' );
 
 				foreach ( $posts as $post_id ) {
 					
@@ -508,16 +516,17 @@ if ( ! class_exists( 'BTBB_Light' ) ) {
 
 				if ( ! empty( $_REQUEST['s'] ) ) {
 					echo sprintf( '<span class="subtitle">'
+						/* translators: %s: search query */
 						. esc_html__( 'Search results for &#8220;%s&#8221;', 'bold-timeline' )
-						. '</span>', esc_html( sanitize_text_field( $_REQUEST['s'] ) ) );
+						. '</span>', esc_html( sanitize_text_field( wp_unslash( $_REQUEST['s'] ) ) ) );
 				}
-				
+
 			?>
 
 			<hr class="wp-header-end">
 
 			<form method="get" action="">
-				<input type="hidden" name="page" value="<?php echo esc_attr( sanitize_text_field( $_REQUEST['page'] ) ); ?>" />
+				<input type="hidden" name="page" value="<?php echo esc_attr( isset( $_REQUEST['page'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['page'] ) ) : '' ); ?>" />
 				<?php $list_table->search_box( esc_html__( 'Search', 'bold-timeline' ), $this->slug ); ?>
 				<?php $list_table->display(); ?>
 			</form>
@@ -538,8 +547,9 @@ if ( ! class_exists( 'BTBB_Light' ) ) {
 			$post_title = '';
 			$post_content = '';
 
+			// intval (not absint) — ?post=-1 is the "new post" sentinel; absint would coerce it to 1.
 			$post_id = isset( $_GET['post'] ) ? intval( $_GET['post'] ) : -1;
-			
+
 			if ( $post_id > 0 ) {
 				$post = get_post( $post_id );
 				$post_title = $post->post_title;
@@ -627,7 +637,7 @@ if ( ! class_exists( 'BTBB_Light' ) ) {
 				if ( $this->support_url != '' ) { ?>
 					<li class="bt-bb-light-support"><a href="<?php echo esc_url( $this->support_url ); ?>" target="_blank"><?php esc_html_e( 'Support', 'bold-timeline' ); ?></a></li>
 				<?php } ?>
-					<li class="bt-bb-light-revisions"><a href="<?php echo wp_get_post_revisions_url( $post_id ); ?>" target="_blank"><?php esc_html_e( 'Revisions', 'bold-timeline' ); ?></a></li>
+					<li class="bt-bb-light-revisions"><a href="<?php echo esc_url( wp_get_post_revisions_url( $post_id ) ); ?>" target="_blank"><?php esc_html_e( 'Revisions', 'bold-timeline' ); ?></a></li>
 				</ul>
 				</div>
 				</div><!-- #informationdiv -->
@@ -702,13 +712,13 @@ if ( ! class_exists( 'BTBB_Light' ) ) {
 			$disabled = '';
 
 			if ( isset( $_POST['purchase_code'] ) ) {
-			
-				if ( ! wp_verify_nonce( sanitize_text_field( $_REQUEST['_wpnonce'] ), 'bt-bb-light-license' ) ) {
+
+				if ( ! isset( $_REQUEST['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce'] ) ), 'bt-bb-light-license' ) ) {
 					wp_die( esc_html__( 'Nonce error.', 'bold-timeline' ) );
 				}
-				
-				$purchase_code = sanitize_text_field( $_POST['purchase_code'] );
-				$email = sanitize_email( $_POST['email'] );
+
+				$purchase_code = sanitize_text_field( wp_unslash( $_POST['purchase_code'] ) );
+				$email         = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
 				
 				if ( isset( $_POST['deactivate'] ) ) {
 					
@@ -842,7 +852,13 @@ if ( ! class_exists( 'BTBB_Light' ) ) {
 				<div id="post-body" class="metabox-holder columns-2">
 				<div id="post-body-content">
 				
-				<p class="bt-bb-light-description"><?php echo sprintf( esc_html__( 'In order to receive all benefits, you need to activate your copy of the plugin. By activating license you will unlock premium options - %sdirect plugin updates%s and %sassistance of our support team%s.' ), '<strong>', '</strong>', '<strong>', '</strong>' ); ?></p>
+				<p class="bt-bb-light-description"><?php
+					echo sprintf(
+						/* translators: %1$s, %3$s: opening <strong> tag; %2$s, %4$s: closing </strong> tag */
+						esc_html__( 'In order to receive all benefits, you need to activate your copy of the plugin. By activating license you will unlock premium options - %1$sdirect plugin updates%2$s and %3$sassistance of our support team%4$s.', 'bold-timeline' ),
+						'<strong>', '</strong>', '<strong>', '</strong>'
+					);
+				?></p>
 				
 				<p class="bt-bb-light-description"><?php esc_html_e( 'If you do not have a license or you have activated a license on another site, then you can ', 'bold-timeline' ); ?><a href="<?php echo esc_url( $this->home_url ); ?>" target="_blank"><em><?php esc_html_e( 'purchase a license here', 'bold-timeline' ); ?></em></a><?php esc_html_e( '.', 'bold-timeline' ); ?></p>
 				
@@ -900,16 +916,18 @@ if ( ! class_exists( 'BTBB_Light' ) ) {
 			if ( empty( $_REQUEST['message'] ) ) {
 				return;
 			}
-			if ( ! isset( $_REQUEST['page'] ) || strpos( $_REQUEST['page'], $this->slug ) === false ) {
+			$page    = isset( $_REQUEST['page'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['page'] ) ) : '';
+			$message = sanitize_text_field( wp_unslash( $_REQUEST['message'] ) );
+			if ( '' === $page || strpos( $page, $this->slug ) === false ) {
 				return;
 			}
-			if ( 'created' == $_REQUEST['message'] ) {
+			if ( 'created' === $message ) {
 				$updated_message = esc_html__( 'Post created.', 'bold-timeline' );
-			} elseif ( 'saved' == $_REQUEST['message'] ) {
+			} elseif ( 'saved' === $message ) {
 				$updated_message = esc_html__( 'Post saved.', 'bold-timeline' );
-			} elseif ( 'post_deleted' == $_REQUEST['message'] ) {
+			} elseif ( 'post_deleted' === $message ) {
 				$updated_message = esc_html__( 'Post deleted.', 'bold-timeline' );
-			} elseif ( 'posts_deleted' == $_REQUEST['message'] ) {
+			} elseif ( 'posts_deleted' === $message ) {
 				$updated_message = esc_html__( 'Posts deleted.', 'bold-timeline' );
 			}
 
@@ -1047,7 +1065,8 @@ if ( ! class_exists( 'BTBB_Light_Map_Proxy' ) ) {
 						wp_enqueue_style( 'bt_bb_admin_' . uniqid(), $item );
 					}
 				}
-				echo 'window.bt_bb_map["' . $this->base . '"] = window.bt_bb_map_primary.' . $this->base . ' = ' . json_encode( $this->params ) . ';';
+				// Pre-existing dot notation on bt_bb_map_primary is load-bearing — the editor reads it that way elsewhere.
+				echo 'window.bt_bb_map["' . esc_js( $this->base ) . '"] = window.bt_bb_map_primary.' . $this->base . ' = ' . wp_json_encode( $this->params ) . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				$map[ $this->base ] = $this->params;
 			}
 		}
@@ -1067,7 +1086,9 @@ if ( ! class_exists( 'BTBB_Light_Data_Proxy' ) ) {
 			$this->data = $data;
 		}
 		public function js() {
-			echo '<script>window.bt_bb_data = { title: "_root", base: "_root", key: "' . uniqid( 'bt_bb_' ) . '", children: ' . $this->data . ' };</script>';
+			// $this->data is a pre-encoded JSON string (built upstream via wp_json_encode of $bt_bb_array).
+			// Emitting it directly is required so the JS receives a JSON object literal, not a string.
+			echo '<script>window.bt_bb_data = { title: "_root", base: "_root", key: "' . esc_js( uniqid( 'bt_bb_' ) ) . '", children: ' . $this->data . ' };</script>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 	}
 	

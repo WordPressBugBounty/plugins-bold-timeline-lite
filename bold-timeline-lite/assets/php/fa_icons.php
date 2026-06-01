@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 function bold_timeline_fa_icons() {
 	$arr = array(
 		'adjust (fa)' => 'fa_' . 'f042',

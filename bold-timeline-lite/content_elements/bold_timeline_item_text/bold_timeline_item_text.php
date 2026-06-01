@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 // [bold_timeline_item_text]
 
 class bold_timeline_item_text {
@@ -26,7 +30,7 @@ bold_timeline_item_text::init();
 
 function bold_timeline_item_text() {
 
-	Bold_Timeline::$builder->map( 'bold_timeline_item_text', array( 'name' => esc_html__( 'Text', 'bold-builder' ), 'description' => esc_html__( 'Text element', 'bold-builder' ), 'icon' => 'bold_timeline_item_text_icon', 'container' => 'vertical', 'params' => array(), 'accept' => array( '_content' => true ), 'toggle' => true, 'show_settings_on_create' => false, 
+	Bold_Timeline::$builder->map( 'bold_timeline_item_text', array( 'name' => esc_html__( 'Text', 'bold-timeline' ), 'description' => esc_html__( 'Text element', 'bold-timeline' ), 'icon' => 'bold_timeline_item_text_icon', 'container' => 'vertical', 'params' => array(), 'accept' => array( '_content' => true ), 'toggle' => true, 'show_settings_on_create' => false, 
             'params' => array(
                     array( 'param_name' => 'el_id', 'type' => 'textfield', 'heading' => esc_html__( 'Custom Id Attribute', 'bold-timeline' ), 'group' => esc_html__( 'Custom', 'bold-timeline' ), 'preview' => true ),
                     array( 'param_name' => 'el_class', 'type' => 'textfield', 'heading' => esc_html__( 'Extra Class Name(s)', 'bold-timeline' ), 'preview' => true, 'group' => esc_html__( 'Custom', 'bold-timeline' ), 'preview' => true ),

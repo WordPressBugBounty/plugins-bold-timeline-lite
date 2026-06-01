@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 function bold_timeline_FontAwesome5Brands_icons() {
 	$set = 'fa5b';
 	$arr = array(

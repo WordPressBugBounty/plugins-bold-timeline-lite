@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 		$prefix = 'bold_timeline_item_text';
 		$class = array( $prefix );
                 

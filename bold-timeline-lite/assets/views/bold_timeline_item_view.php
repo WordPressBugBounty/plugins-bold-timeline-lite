@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 		$prefix = 'bold_timeline_item';
 		$class = array( $prefix );
 		
@@ -199,9 +203,9 @@
 			$output .= '<div class="bold_timeline_item_inner">';
 				$output .= '<div class="' . implode( ' ', $header_class ) . '">';
 					$output .= '<div class="bold_timeline_item_header_inner">';
-						if ( $supertitle != '' ) $output .= '<p class="bold_timeline_item_header_supertitle"><span class="bold_timeline_item_header_supertitle_inner">' . $supertitle . '</span></p>';
+						if ( $supertitle != '' ) $output .= '<p class="bold_timeline_item_header_supertitle"><span class="bold_timeline_item_header_supertitle_inner">' . wp_kses_post( $supertitle ) . '</span></p>';
 						if ( $title != '' ) $output .= '<' . $item_title_tag . ' class="bold_timeline_item_header_title">' . wp_kses_post( $title ) . '</' . $item_title_tag . '>';
-						if ( $subtitle != '' ) $output .= '<p class="bold_timeline_item_header_subtitle">' . $subtitle . '</p>';
+						if ( $subtitle != '' ) $output .= '<p class="bold_timeline_item_header_subtitle">' . wp_kses_post( $subtitle ) . '</p>';
 					$output .= '</div>';
 				$output .= '</div>';
 				$output .= '<div class="bold_timeline_item_content">';
